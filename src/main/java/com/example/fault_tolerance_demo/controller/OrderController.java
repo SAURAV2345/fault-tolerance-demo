@@ -19,8 +19,12 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<String> takeOrder() throws Exception {
         logger.info("Order received");
+        try{
         String status = paymentService.callPaymentService();
         logger.info("payment received");
         return ResponseEntity.ok(status);
+        } catch(Exception e){
+            return ResponseEntity.ok("Payment service unavailable");
+        }
     }
 }

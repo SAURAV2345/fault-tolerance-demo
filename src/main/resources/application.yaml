@@ -11,18 +11,22 @@ management:
       show-details: always
 resilience4j:
   circuitbreaker:
+    aspect-order: 2
     instances:
       paymentService:
         registerHealthIndicator: true
         slidingWindowSize: 3
-        minimumNumberOfCalls: 3
+        minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 5s
   retry:
+    aspect-order: 1
     instances:
       paymentService:
         maxAttempts: 3
-        waitDuration: 1s
+        waitDuration: 10ms
+        retryExceptions:
+          - java.lang.Exception
   timelimiter:
     instances:
       paymentService:
