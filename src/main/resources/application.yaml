@@ -5,7 +5,25 @@ management:
   endpoints:
     web:
       exposure:
-        include: info,health
+        include: info,health,circuitbreakers
   endpoint:
     health:
       show-details: always
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        registerHealthIndicator: true
+        slidingWindowSize: 3
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+  retry:
+    instances:
+      paymentService:
+        maxAttempts: 3
+        waitDuration: 1s
+  timelimiter:
+    instances:
+      paymentService:
+        timeoutDuration: 2s
